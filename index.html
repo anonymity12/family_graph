@@ -24,13 +24,20 @@
 <script src='scripts/getJsonFromXml.js'></script>
 <script src='scripts/drawTree.js'></script>
 
+<script>
+function draw_tree() {
+    var treeURL = document.getElementById('mindmapURL').value;
+    console.log('reading tree from:', treeURL);
+    var treeData = getJsonFromXml(treeURL);
+    drawTree(treeData);
+}
+</script>
 </meta>
 
 <body>
 
-<script>
-    console.log(document.body.children);
-var treeData = getJsonFromXml('mindmaps/test.mm');
-drawTree(treeData);
-</script>
+Freeplane mindmap URL:
+<input type="text" id="mindmapURL" name="mindmapURL" value="https://raw.githubusercontent.com/MMesch/freeplane_with_d3js/master/mindmaps/test.mm"><br>
+<button onclick="draw_tree()">Submit</button>
+
 </body>
