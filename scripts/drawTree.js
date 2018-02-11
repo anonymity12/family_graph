@@ -2,21 +2,24 @@
  * draws a collapsible tree from hierarchical JSON data
  */
 
-function drawTree(treeData) {
-    // Set the dimensions and margins of the diagram
-    var margin = {top: 20, right: 100, bottom: 30, left: 100},
-        width = window.innerWidth - margin.left - margin.right,
-        height = window.innerHeight - margin.top - margin.bottom;
-    
-    // append the svg object to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.right + margin.left)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate("
-              + margin.left + "," + margin.top + ")");
+function drawTree(treeData, domElement) {
+
+    if(domElement == null) {
+        var width = window.innerWidth,
+            height = window.innerHeight;
+        
+        // append the svg object to the body of the page
+        // appends a 'group' element to 'svg'
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+    }
+    else {
+        var width = domElement.getBoundingClientRect().width,
+            height = domElement.getBoundingClientRect().height;
+        var svg = d3.select(domElement);
+        console.log(width, height);
+    }
     
     var i = 0,
         duration = 750,
@@ -71,23 +74,24 @@ function drawTree(treeData) {
         .on('click', click);
     
       // Add Circle for the nodes
-      nodeEnter.append('circle')
-          .attr('class', 'node')
-          .attr('r', 1e-6)
-          .style("fill", function(d) {
-              return d._children ? "lightsteelblue" : "#fff";
-          });
+      function getBB(selection) {
+          selection.each(function(d){d.bbox = this.getBBox();})
+      };
     
       // Add labels for the nodes
       nodeEnter.append('text')
           .attr("dy", ".35em")
-          .attr("x", function(d) {
-              return d.children || d._children ? -13 : 13;
-          })
-          .attr("text-anchor", function(d) {
-              return d.children || d._children ? "end" : "start";
-          })
-          .text(function(d) { return d.data.name; });
+          .attr("x", "0")
+          .attr("text-anchor", "middle")
+          .text(function(d) { return d.data.name; }).call(getBB)
+          .attr('pointer-events', 'none');
+      nodeEnter.insert("rect","text")
+          .attr("x", function(d){return -d.bbox.width/2})
+          .attr("y", function(d){return -d.bbox.height/2})
+          .attr("width", function(d){return d.bbox.width})
+          .attr("height", function(d){return d.bbox.height})
+          .style("fill", "white")
+          .style('opacity', 0.8);
     
       // UPDATE
       var nodeUpdate = nodeEnter.merge(node);

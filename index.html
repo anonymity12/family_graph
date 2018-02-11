@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-
 .node circle {
   fill: #fff;
   stroke: steelblue;
@@ -18,6 +17,14 @@
   stroke-width: 2px;
 }
 
+#tree {
+    width: 95%;
+    height: 800px;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+}
 </style>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -29,15 +36,19 @@ function draw_tree() {
     var treeURL = document.getElementById('mindmapURL').value;
     console.log('reading tree from:', treeURL);
     var treeData = getJsonFromXml(treeURL);
-    drawTree(treeData);
+    var svgElement = document.getElementById('tree');
+    drawTree(treeData, svgElement);
 }
 </script>
+
 </meta>
 
 <body>
-
 Freeplane mindmap URL:
 <input type="text" id="mindmapURL" name="mindmapURL" value="https://raw.githubusercontent.com/MMesch/freeplane_with_d3js/master/mindmaps/test.mm"><br>
 <button onclick="draw_tree()">Submit</button>
+
+<svg id="tree">
+</svg>
 
 </body>
