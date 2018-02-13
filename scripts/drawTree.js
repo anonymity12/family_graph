@@ -18,7 +18,6 @@ function drawTree(treeData, domElement) {
         var width = domElement.getBoundingClientRect().width,
             height = domElement.getBoundingClientRect().height;
         var svg = d3.select(domElement);
-        console.log(width, height);
     }
     
     var i = 0,
@@ -26,16 +25,17 @@ function drawTree(treeData, domElement) {
         root;
     
     // declares a tree layout and assigns the size
-    var treemap = d3.tree().size([height, width]);
+    // var treemap = d3.tree().size([width, height]);
+    var treemap = d3.cluster().size([width, height]);
     
     // Assigns parent, children, height, depth
     root = d3.hierarchy(treeData, function(d) { return d.children; });
-    root.x0 = height / 2;
-    root.y0 = 0;
-    
+    root.x0 = width / 2;
+    root.y0 = 200;
+
     // Collapse after the second level
     root.children.forEach(collapse);
-    
+   
     update(root);
     
     // Collapse the node and all it's children
@@ -46,18 +46,22 @@ function drawTree(treeData, domElement) {
         d.children = null
       }
     }
+
+    function getBB(selection) {
+        selection.each(function(d){d.bbox = this.getBBox();})
+    };
     
     function update(source) {
     
-      // Assigns the x and y position for the nodes
+      // Assigns the x and y positions of the nodes
       var treeData = treemap(root);
-    
+
       // Compute the new tree layout.
       var nodes = treeData.descendants(),
           links = treeData.descendants().slice(1);
     
       // Normalize for fixed-depth.
-      nodes.forEach(function(d){ d.y = d.depth * 180});
+      nodes.forEach(function(d){ d.y = 50 + d.depth * 180});
     
       // ****************** Nodes section ***************************
     
@@ -69,14 +73,9 @@ function drawTree(treeData, domElement) {
       var nodeEnter = node.enter().append('g')
           .attr('class', 'node')
           .attr("transform", function(d) {
-            return "translate(" + source.y0 + "," + source.x0 + ")";
+            return "translate(" + source.x0 + "," + source.y0 + ")";
         })
         .on('click', click);
-    
-      // Add Circle for the nodes
-      function getBB(selection) {
-          selection.each(function(d){d.bbox = this.getBBox();})
-      };
     
       // Add labels for the nodes
       nodeEnter.append('text')
@@ -85,13 +84,14 @@ function drawTree(treeData, domElement) {
           .attr("text-anchor", "middle")
           .text(function(d) { return d.data.name; }).call(getBB)
           .attr('pointer-events', 'none');
-      nodeEnter.insert("rect","text")
+      nodeEnter.insert("rect", "text")
           .attr("x", function(d){return -d.bbox.width/2})
           .attr("y", function(d){return -d.bbox.height/2})
           .attr("width", function(d){return d.bbox.width})
           .attr("height", function(d){return d.bbox.height})
           .style("fill", "white")
-          .style('opacity', 0.8);
+          .style('opacity', 0.8)
+          .attr('cursor', 'pointer');
     
       // UPDATE
       var nodeUpdate = nodeEnter.merge(node);
@@ -100,36 +100,26 @@ function drawTree(treeData, domElement) {
       nodeUpdate.transition()
         .duration(duration)
         .attr("transform", function(d) { 
-            return "translate(" + d.y + "," + d.x + ")";
+            return "translate(" + d.x + "," + d.y + ")";
          });
-    
-      // Update the node attributes and style
-      nodeUpdate.select('circle.node')
-        .attr('r', 10)
-        .style("fill", function(d) {
-            return d._children ? "lightsteelblue" : "#fff";
-        })
-        .attr('cursor', 'pointer');
-    
     
       // Remove any exiting nodes
       var nodeExit = node.exit().transition()
           .duration(duration)
           .attr("transform", function(d) {
-              return "translate(" + source.y + "," + source.x + ")";
+              return "translate(" + source.x + "," + source.y + ")";
           })
           .remove();
     
       // On exit reduce the node circles size to 0
-      nodeExit.select('circle')
-        .attr('r', 1e-6);
+      nodeExit.select('rect')
+        .style('opacity', 1e-6)
     
       // On exit reduce the opacity of text labels
       nodeExit.select('text')
         .style('fill-opacity', 1e-6);
     
       // ****************** links section ***************************
-    
       // Update the links...
       var link = svg.selectAll('path.link')
           .data(links, function(d) { return d.id; });
@@ -167,12 +157,10 @@ function drawTree(treeData, domElement) {
     
       // Creates a curved (diagonal) path from parent to the child nodes
       function diagonal(s, d) {
-    
-        path = `M ${s.y} ${s.x}
-                C ${(s.y + d.y) / 2} ${s.x},
-                  ${(s.y + d.y) / 2} ${d.x},
-                  ${d.y} ${d.x}`
-    
+        path = `M ${s.x} ${s.y}
+                C ${s.x} ${(s.y + d.y) / 2},
+                  ${d.x} ${(s.y + d.y) / 2},
+                  ${d.x} ${d.y}`
         return path
       }
     
