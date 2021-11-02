@@ -1,0 +1,41 @@
+{
+    "name": "郑氏家谱",
+    "children": [
+        {
+            "name": "郑桓公",
+            "children": [
+                {
+                    "name": "郑成功",
+                    "children": [
+                        {
+                            "name": "郑氏其他先辈",
+                            "children": [
+                                {
+                                    "name": "郑荣天",
+                                    "children": []
+                                },
+                                {
+                                    "name": "郑榕莲",
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "郑文公",
+            "children": [
+                {
+                    "name": "郑玄，东汉经学家",
+                    "children": []
+                },
+                {
+                    "name": "郑板桥，大清画家",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

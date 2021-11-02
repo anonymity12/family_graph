@@ -38,6 +38,7 @@ function draw_tree() {
     console.log('reading tree from:', treeURL);
     var treeData = getJsonFromXml(treeURL);
     var svgElement = document.getElementById('tree');
+    console.log("before pass into drawTree.js, treeData is: ", treeData)
     drawTree(treeData, svgElement);
 }
 </script>
