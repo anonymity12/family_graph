@@ -4,18 +4,19 @@
 
 body {
     font-family: "Verdana", sans-serif;
+    font-size: larger;
     background: linear-gradient(rgb(240, 240, 250), rgb(250, 240, 240),
                                 rgb(240, 250, 240));
 }
 
 .node text {
-  font: 12px sans-serif;
+  font: 24px sans-serif;
 }
 
 .link {
   fill: none;
   stroke: #ccc;
-  stroke-width: 2px;
+  stroke-width: 8px;
 }
 
 #tree {
@@ -24,31 +25,28 @@ body {
     display: block;
     margin: auto;
     margin-top: 20px;
-    border: 1px solid #ccc;
+    border: 10px solid #ccc;
 }
 </style>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src='scripts/getJsonFromXml.js'></script>
 <script src='scripts/drawTree.js'></script>
+<script src='scripts/get_json_from_oss.js'></script>
 
 <script>
 function draw_tree() {
-    var treeURL = document.getElementById('mindmapURL').value;
-    console.log('reading tree from:', treeURL);
-    var treeData = getJsonFromXml(treeURL);
+    var jsonData = getJsonFromOss();
     var svgElement = document.getElementById('tree');
-    console.log("before pass into drawTree.js, treeData is: ", treeData)
-    drawTree(treeData, svgElement);
+    drawTree(jsonData, svgElement);
 }
 </script>
 
 </meta>
 
-<body>
-Freeplane mindmap URL:
-<input type="text" id="mindmapURL" name="mindmapURL" value="https://raw.githubusercontent.com/anonymity12/family_graph/master/mindmaps/zsjp.mm"><br>
-<button onclick="draw_tree()">Submit</button>
+<body onload=draw_tree()>
+
+<h1>郑家族谱</h1>
 
 <svg id="tree">
 </svg>

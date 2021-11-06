@@ -8,4 +8,8 @@
 
 支持 上述 分离的 json 的远程读取。
 
-- [ ] 完成 get_json_from_oss.js
+- [x] 完成 get_json_from_oss.js
+
+`nodes.forEach(function(d){ d.y = 50 + d.depth * 80});` 这句降低了高度
+
+本来：`nodes.forEach(function(d){ d.y = 50 + d.depth * 180});`

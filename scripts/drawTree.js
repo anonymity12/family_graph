@@ -3,49 +3,8 @@
  */
 
 function drawTree(treeData, domElement) {
-  console.log("treeddate: ", treeData)
-  treeData = {
-  "name": "郑族家谱",
-  "children": [
-      {
-          "name": "郑桓公",
-          "children": [
-              {
-                  "name": "郑成功",
-                  "children": [
-                      {
-                          "name": "郑氏其他先辈",
-                          "children": [
-                              {
-                                  "name": "郑荣天",
-                                  "children": []
-                              },
-                              {
-                                  "name": "郑榕莲",
-                                  "children": []
-                              }
-                          ]
-                      }
-                  ]
-              }
-          ]
-      },
-      {
-          "name": "郑文公",
-          "children": [
-              {
-                  "name": "郑玄，西汉经学家",
-                  "children": []
-              },
-              {
-                  "name": "郑板桥，大清画家",
-                  "children": []
-              }
-          ]
-      }
-  ]
-}
-  console.log("treeddate after change: ", treeData)
+  // console.log("oss: treeddate: ", treeData)
+
 
   if(domElement == null) {
       var width = window.innerWidth,
@@ -59,7 +18,7 @@ function drawTree(treeData, domElement) {
   }
   else {
       var width = domElement.getBoundingClientRect().width,
-          height = domElement.getBoundingClientRect().height;
+          height = domElement.getBoundingClientRect().height * 2;
       var svg = d3.select(domElement);
   }
   
@@ -69,6 +28,7 @@ function drawTree(treeData, domElement) {
   
   // declares a tree layout and assigns the size
   // var treemap = d3.tree().size([width, height]);
+  console.log("draw heitht si: ", height)
   var treemap = d3.cluster().size([width, height]);
   
   // Assigns parent, children, height, depth
@@ -77,7 +37,7 @@ function drawTree(treeData, domElement) {
   root.y0 = 200;
 
   // Collapse after the second level
-  root.children.forEach(collapse);
+  // root.children.forEach(collapse);
  
   update(root);
   
@@ -104,7 +64,7 @@ function drawTree(treeData, domElement) {
         links = treeData.descendants().slice(1);
   
     // Normalize for fixed-depth.
-    nodes.forEach(function(d){ d.y = 50 + d.depth * 180});
+    nodes.forEach(function(d){ d.y = 50 + d.depth * 80});
   
     // ****************** Nodes section ***************************
   
