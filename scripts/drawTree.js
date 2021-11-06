@@ -3,7 +3,7 @@
  */
 
 function drawTree(treeData, domElement) {
-  // console.log("oss: treeddate: ", treeData)
+   console.log("oss: treeddate: ", treeData)
 
 
   if(domElement == null) {
@@ -18,7 +18,7 @@ function drawTree(treeData, domElement) {
   }
   else {
       var width = domElement.getBoundingClientRect().width,
-          height = domElement.getBoundingClientRect().height * 2;
+          height = domElement.getBoundingClientRect().height;
       var svg = d3.select(domElement);
   }
   
@@ -29,10 +29,11 @@ function drawTree(treeData, domElement) {
   // declares a tree layout and assigns the size
   // var treemap = d3.tree().size([width, height]);
   console.log("draw heitht si: ", height)
-  var treemap = d3.cluster().size([width, height]);
+  var treemap = d3.cluster().size([width,400]);
   
   // Assigns parent, children, height, depth
   root = d3.hierarchy(treeData, function(d) { return d.children; });
+  // 初始动画的开始点
   root.x0 = width / 2;
   root.y0 = 200;
 
@@ -64,7 +65,7 @@ function drawTree(treeData, domElement) {
         links = treeData.descendants().slice(1);
   
     // Normalize for fixed-depth.
-    nodes.forEach(function(d){ d.y = 50 + d.depth * 80});
+    nodes.forEach(function(d){ d.y = 50 + d.depth * 100});
   
     // ****************** Nodes section ***************************
   

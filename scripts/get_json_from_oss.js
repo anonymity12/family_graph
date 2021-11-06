@@ -6,8 +6,6 @@ function getJsonFromOss() {
     jsonHttpReq.open("GET", jsonUrl, false)
 
     jsonHttpReq.send()
-    console.log("jsonHttpReq response", jsonHttpReq.responseText)
-    // jsonResp = jsonHttpReq.responseXML
     var jsonData = JSON.parse(jsonHttpReq.responseText)
     return jsonData
 
